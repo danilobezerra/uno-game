@@ -12,5 +12,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Unt Make
+    - name: Run Make
       run: make
