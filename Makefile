@@ -1,13 +1,21 @@
 CC = g++
-CFLAGS = -std=c++11
+CFLAGS = -std=c++11 -I./inc
 
-all: release
+TARGET = uno
+SRC_DIR = src
+OBJ_DIR = out
 
-main.o: main.cpp
-	${CC} ${CFLAGS} -c main.cpp
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
-release: main.o
-	${CC} ${CFLAGS} -o main main.o
+all: $(TARGET)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f main *.o
+	rm -rf $(TARGET) $(OBJ_DIR)
