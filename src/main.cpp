@@ -3,11 +3,11 @@
 int roundsCount = 5;
 
 int main() {
-	GameRound round;
+    GameRound round;
 
     for (int i = 0; i < roundsCount; i++) {
         round.play();
     }
 
-	return 0;
+    return 0;
 }
