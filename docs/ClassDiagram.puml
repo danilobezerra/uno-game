@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum CardColor {
+    BLUE,
+    YELLOW,
+    RED,
+    GREEN
+}
+
+enum CardValue {
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    PLUS_TWO,
+    REVERSE,
+    JUMP,
+    PLUS_FOUR,
+    PLUS_TWO_DISCARD,
+    SWITCH_HAND
+}
+
+class Card {
+    + getColor(): CardColor
+    + getValue(): CardValue
+}
+
+class Deck {
+
+    + shuffle(): void
+    + draw(): Card
+    + count(): int
+}
+
+class GameMatch {
+
+}
+
+class GameState {
+
+}
+
+abstract class Player {
+    - name: string
+    - points: int
+
+    + getName(): string
+    + getPoints(): int
+    + addPoints(amount: int): void
+    + {abstract} performAction(state: GameState): Card
+}
+
+Card  --  CardColor
+Card  --  CardValue
+Deck "1   " *-- "0..112  " Card
+Player <|--- HumanPlayer
+Player <|--- AIPlayer
+Player "1  " o-- "0..N      " Card
+Player -> GameState
+GameMatch "1" *-- "2..10  " Player
+GameMatch "1" *-- "1    " Deck
+GameMatch <-> GameState
+
+@enduml
