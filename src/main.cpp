@@ -1,13 +1,28 @@
-#include "GameRound.h"
+#include <iostream>
 
-int roundsCount = 5;
+#include "Deck.h"
+#include "Player.h"
+#include "GameMatch.h"
 
 int main() {
-    GameRound round;
+    srand(time(NULL));
 
-    for (int i = 0; i < roundsCount; i++) {
-        round.play();
-    }
+    Deck deck;
+
+    std::vector<Player> players;
+    players.emplace_back(Player());
+    players.emplace_back(Player());
+    players.emplace_back(Player());
+
+    GameMatch match = GameMatch(deck, players);
+    int numberOfMatches = 0;
+
+    do {
+        std::cout << "Starting Match #" << numberOfMatches + 1 << std::endl;
+        match.play();
+
+        numberOfMatches++;
+    } while (!match.isGameOver());
 
     return 0;
 }
