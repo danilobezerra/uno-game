@@ -40,7 +40,8 @@ class Deck {
 }
 
 class GameMatch {
-
+    + play(): void
+    + isGameOver(): bool
 }
 
 class GameState {
@@ -59,10 +60,10 @@ abstract class Player {
 
 Card  --  CardColor
 Card  --  CardValue
-Deck "1   " *-- "0..112  " Card
+Deck "1   " o-- "0..112  " Card
 Player <|--- HumanPlayer
 Player <|--- AIPlayer
-Player "1  " o-- "0..N      " Card
+Player "1  " o-- "0..*      " Card
 Player -> GameState
 GameMatch "1" *-- "2..10  " Player
 GameMatch "1" *-- "1    " Deck
