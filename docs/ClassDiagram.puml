@@ -40,7 +40,10 @@ class Deck {
 }
 
 class GameMatch {
+
+    - init(): void
     + play(): void
+    + isMatchOver(): bool
     + isGameOver(): bool
 }
 
@@ -52,6 +55,8 @@ abstract class Player {
     - name: string
     - points: int
 
+    + addToHand(card: Card): void
+    + clearHand(): void
     + getName(): string
     + getPoints(): int
     + addPoints(amount: int): void
