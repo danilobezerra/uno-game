@@ -4,7 +4,9 @@
 
 #include "GameMatch.h"
 
-GameMatch::GameMatch(Deck &inDeck, std::vector<Player> &inPlayers) : deck(inDeck), players(inPlayers) {
+#include <utility>
+
+GameMatch::GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), players(std::move(inPlayers)) {
 
 }
 
@@ -12,9 +14,11 @@ void GameMatch::play() {
     deck.shuffle();
 
     // TODO: deal cards...
+
+
 }
 
-bool GameMatch::isGameOver() {
+bool GameMatch::isGameOver() const {
     // TODO: The winner is the first to score 500 points.
     return false;
 }

@@ -1,20 +1,28 @@
 #include <iostream>
+#include <vector>
+#include <memory>
 
-#include "Deck.h"
 #include "Player.h"
+#include "HumanPlayer.h"
+#include "AIPlayer.h"
 #include "GameMatch.h"
 
 int main() {
     srand(time(NULL));
 
     Deck deck;
+    std::vector<std::unique_ptr<Player>> players;
 
-    std::vector<Player> players;
-    players.emplace_back(Player());
-    players.emplace_back(Player());
-    players.emplace_back(Player());
+    HumanPlayer p1("You");
+    players.emplace_back(std::unique_ptr<Player>(new HumanPlayer(p1)));
 
-    GameMatch match = GameMatch(deck, players);
+    AIPlayer p2("CPU #1");
+    players.emplace_back(std::unique_ptr<Player>(new AIPlayer(p2)));
+
+    AIPlayer p3("CPU #2");
+    players.emplace_back(std::unique_ptr<Player>(new AIPlayer(p3)));
+
+    GameMatch match = GameMatch(deck, std::move(players));
     int numberOfMatches = 0;
 
     do {
