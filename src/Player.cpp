@@ -4,11 +4,21 @@
 
 #include "Player.h"
 
-Player::Player(const std::string &inName) : name(inName), points(0) {
+#include <utility>
+
+Player::Player(std::string inName) : name(std::move(inName)), points(0) {
 
 }
 
 Player::~Player() = default;
+
+void Player::addToHand(Card &card) {
+    hand.push_back(card);
+}
+
+void Player::clearHand() {
+    hand.clear();
+}
 
 std::string Player::getName() const {
     return name;

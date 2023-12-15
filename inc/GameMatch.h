@@ -14,10 +14,12 @@ class GameMatch {
     Deck deck;
     std::vector<std::unique_ptr<Player>> players;
 
+    void init();
 public:
     GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers);
 
     void play();
+    bool isMatchOver() const;
     bool isGameOver() const;
 };
 

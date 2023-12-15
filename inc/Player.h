@@ -19,8 +19,11 @@ protected:
     int points;
 
 public:
-    Player(const std::string &inName);
+    Player(std::string inName);
     virtual ~Player();
+
+    void addToHand(Card &card);
+    void clearHand();
 
     std::string getName() const;
     int getPoints() const;
