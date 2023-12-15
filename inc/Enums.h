@@ -8,17 +8,17 @@
 #include <iostream>
 
 enum class CardColor {
-    BLUE,
-    YELLOW,
-    RED,
-    GREEN
+    BLUE, // 19 Cartas Azuis (0 a 9)
+    YELLOW, // 19 Cartas Amarelas (0 a 9)
+    RED, // 19 Cartas Vermelhas (0 a 9)
+    GREEN, // 19 Cartas Verdes (0 a 9)
 };
 
 const CardColor all_card_colors[] = {
-        CardColor::BLUE,
-        CardColor::YELLOW,
-        CardColor::RED,
-        CardColor::GREEN
+    CardColor::BLUE,
+    CardColor::YELLOW,
+    CardColor::RED,
+    CardColor::GREEN
 };
 
 enum class CardValue {
@@ -32,12 +32,16 @@ enum class CardValue {
     SEVEN,
     EIGHT,
     NINE,
-    PLUS_TWO,
-    REVERSE,
-    JUMP,
-    PLUS_FOUR,
-    PLUS_TWO_DISCARD,
-    SWITCH_HAND
+    PLUS_TWO, // 8 Cartas 'Comprar Duas Cartas' (2 de cada cor)
+    REVERSE, // 8 Cartas 'Inverter' (2 de cada cor)
+    JUMP,  // 8 Cartas 'Pular' (2 de cada cor)
+
+    /*
+     * TODO: Also, you will have to build one of the 3 extra features:
+     */
+    PLUS_FOUR, // 4 Cartas Curinga 'Comprar Quatro Cartas'
+    PLUS_TWO_DISCARD, // 4 Cartas 'Duas Cartas da Mesa' (1 de cada cor)
+    SWITCH_HAND // 4 Cartas Curinga 'Trocar as Mãos'
 };
 
 const CardValue all_card_values[] = {
