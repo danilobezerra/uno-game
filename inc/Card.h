@@ -16,6 +16,7 @@ public:
 
     CardColor getColor() const;
     CardValue getValue() const;
+    std::string_view toString() const;
 };
 
 
