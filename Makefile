@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -I./inc
+CFLAGS = -std=c++17 -I./inc
 
 TARGET = uno
 SRC_DIR = src
