@@ -5,12 +5,19 @@
 #include "Deck.h"
 
 Deck::Deck() {
-    for (int i = 0; i < static_cast<int>(CardColor::YELLOW) + 1; i++) {
-        for (int j = 0; j < static_cast<int>(CardValue::JUMP) + 1; j++) {
+
+    // TODO: create Deck only with 0-9
+    for (int i = 0; i < static_cast<int>(CardColor::GREEN) + 1; i++) {
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::ZERO);
+
+        for (int j = 1; j < static_cast<int>(CardValue::NINE) + 1; j++) {
             Card card = Card(static_cast<CardColor>(i), static_cast<CardValue>(j));
+
+            cards.push_back(card);
             cards.push_back(card);
         }
     }
+
 }
 
 /*
