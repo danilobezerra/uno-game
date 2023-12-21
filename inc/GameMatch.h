@@ -12,9 +12,17 @@
 
 class GameMatch {
     Deck deck;
-    std::vector<std::unique_ptr<Player>> players;
 
-    void init();
+    std::vector<std::unique_ptr<Player>> players;
+    std::vector<Card> drawPile;
+    std::vector<Card> discardPile;
+
+
+    // TODO: setup game state
+    GameState state;
+
+    void setup();
+    int countPoints() const;
 public:
     GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers);
 

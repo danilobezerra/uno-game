@@ -10,19 +10,68 @@ GameMatch::GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayer
 
 }
 
-void GameMatch::init() {
-    deck.shuffle();
-
+void GameMatch::setup() {
     for (auto &player : players) {
         player->clearHand();
     }
 
-    // TODO: deal cards...
+    // O jogador que estiver distribuindo as cartas embaralha...
+    deck.shuffle();
 
+    // e distribui 7 cartas para cada um.
+    for (auto &player : players) {
+        for (int i = 0; i < 7; i++) {
+            player->addToHand(deck.draw());
+        }
+    }
+
+    // As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras.
+    while (deck.count() > 0) {
+        drawPile.push_back(deck.draw());
+    }
+
+    // A carta superior da pilha de Compras é virada para formar uma pilha de Descarte.
+    discardPile.push_back(drawPile.back());
+    drawPile.pop_back();
+}
+
+int GameMatch::countPoints() const {
+    int totalPoints = 0;
+
+    for (auto &player : players) {
+        for (auto &card : player->openHand()) {
+            switch (card.getValue()) {
+                case CardValue::ZERO:
+                case CardValue::ONE:
+                case CardValue::TWO:
+                case CardValue::THREE:
+                case CardValue::FOUR:
+                case CardValue::FIVE:
+                case CardValue::SIX:
+                case CardValue::SEVEN:
+                case CardValue::EIGHT:
+                case CardValue::NINE:
+                    totalPoints += static_cast<int>(card.getValue()); // Valor Nominal
+                    break;
+                case CardValue::PLUS_TWO:
+                case CardValue::REVERSE:
+                case CardValue::JUMP:
+                    totalPoints += 20;
+                    break;
+                case CardValue::PLUS_FOUR:
+                case CardValue::PLUS_TWO_DISCARD:
+                case CardValue::SWITCH_HAND:
+                    totalPoints += 50;
+                    break;
+            }
+        }
+    }
+
+    return totalPoints;
 }
 
 void GameMatch::play() {
-    init();
+    setup();
 
     // TODO: setup game state
     GameState state;
