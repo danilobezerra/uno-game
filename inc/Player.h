@@ -22,10 +22,12 @@ public:
     Player(std::string inName);
     virtual ~Player();
 
-    void addToHand(Card &card);
+    void addToHand(const Card &card);
+    size_t getHandSize() const;
+    std::vector<Card> openHand();
     void clearHand();
 
-    std::string getName() const;
+    std::string_view getName() const;
     int getPoints() const;
     void addPoints(int amount);
 

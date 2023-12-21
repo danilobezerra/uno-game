@@ -12,15 +12,28 @@ Player::Player(std::string inName) : name(std::move(inName)), points(0) {
 
 Player::~Player() = default;
 
-void Player::addToHand(Card &card) {
+void Player::addToHand(const Card &card) {
+
+    // Debug
+    std::cout << "Player: " << name << std::endl;
+    std::cout << card.toString() << std::endl;
+
     hand.push_back(card);
+}
+
+std::vector<Card> Player::openHand()  {
+    return std::move(hand);
 }
 
 void Player::clearHand() {
     hand.clear();
 }
 
-std::string Player::getName() const {
+size_t Player::getHandSize() const {
+    return hand.size();
+}
+
+std::string_view Player::getName() const {
     return name;
 }
 
