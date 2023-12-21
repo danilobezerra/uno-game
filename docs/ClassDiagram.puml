@@ -34,6 +34,7 @@ class Card {
 
 class Deck {
 
+    - {static} randomIndex(n: int): int
     + shuffle(): void
     + draw(): Card
     + count(): int
@@ -41,14 +42,31 @@ class Deck {
 
 class GameMatch {
 
-    - init(): void
+    - setup(): void
+    - countPoints(): int
     + play(): void
     + isMatchOver(): bool
     + isGameOver(): bool
 }
 
 class GameState {
+    - clockwiseDirection: bool
+    - currentPlayerIndex: int
+    - playerIndexOrder: int[]
+    - playerCardCount: map<int, int>
+    - playersUnoStatus: map<int, bool>
 
+    + getTopDiscardCard(): Card
+    + setTopDiscardCard(card: Card);
+    + isClockwiseDirection(): bool
+    + setClockwiseDirection(inClockwiseDirection: bool): void
+    + getPlayerIndexOrder(): int
+    + setPlayerIndexOrder(inPlayerIndexOrder: int[]): void
+    + getPlayerCardCount(): map<int, int>
+    + setPlayerCardCount(inPlayerCardCount: map<int, int>): void
+    + getPlayersUnoStatus(): map<int, bool>
+    + setPlayersUnoStatus(inPlayersUnoStatus: map<int, bool>): void
+    + clear(): void
 }
 
 abstract class Player {
@@ -56,6 +74,8 @@ abstract class Player {
     - points: int
 
     + addToHand(card: Card): void
+    + getHandSize(): int
+    + openHand(): Card[]
     + clearHand(): void
     + getName(): string
     + getPoints(): int
@@ -65,7 +85,7 @@ abstract class Player {
 
 Card  --  CardColor
 Card  --  CardValue
-Deck "1   " o-- "0..112  " Card
+Deck "1   " o-- "0..104  " Card
 Player <|--- HumanPlayer
 Player <|--- AIPlayer
 Player "1  " o-- "0..*      " Card
