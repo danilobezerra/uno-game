@@ -99,6 +99,12 @@ bool GameMatch::isMatchOver() const {
 }
 
 bool GameMatch::isGameOver() const {
-    // TODO: The winner is the first to score 500 points.
+    // The winner is the first to score 500 points.
+    for (auto &player : players) {
+        if (player->getPoints() >= 500) {
+            return true;
+        }
+    }
+
     return false;
 }
