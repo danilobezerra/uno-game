@@ -95,7 +95,20 @@ void GameMatch::play() {
 
 bool GameMatch::isMatchOver() const {
     // TODO: When there is only 1 card on the player’s hand, the player had yelled “UNO!”, and the player has used this card matching the rules, then the player is the winner and the match ends;
-    return false;
+    bool matchOver = false;
+
+    for (auto &player : players) {
+        if (player->getHandSize() == 0) {
+            matchOver = true;
+
+            int amount = countPoints();
+            player->addPoints(amount);
+
+            break;
+        }
+    }
+
+    return matchOver;
 }
 
 bool GameMatch::isGameOver() const {
