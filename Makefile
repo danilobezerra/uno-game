@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++17 -I./inc
+CFLAGS = -std=c++17 -I./inc -g
 
 TARGET = uno
 SRC_DIR = src
@@ -16,6 +16,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
+
+debug: $(TARGET)
+	gdb ./$(TARGET)
 
 clean:
 	rm -rf $(TARGET) $(OBJ_DIR)
