@@ -1,0 +1,97 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum CardColor {
+    BLUE,
+    YELLOW,
+    RED,
+    GREEN
+}
+
+enum CardValue {
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    PLUS_TWO,
+    REVERSE,
+    JUMP,
+    PLUS_FOUR,
+    PLUS_TWO_DISCARD,
+    SWITCH_HAND
+}
+
+class Card {
+    + getColor(): CardColor
+    + getValue(): CardValue
+}
+
+class Deck {
+
+    - {static} randomIndex(n: int): int
+    + shuffle(): void
+    + draw(): Card
+    + count(): int
+}
+
+class GameMatch {
+
+    - setup(): void
+    - countPoints(): int
+    + play(): void
+    + isMatchOver(): bool
+    + isGameOver(): bool
+}
+
+class GameState {
+    - clockwiseDirection: bool
+    - currentPlayerIndex: int
+    - playerIndexOrder: int[]
+    - playerCardCount: map<int, int>
+    - playersUnoStatus: map<int, bool>
+
+    + getTopDiscardCard(): Card
+    + setTopDiscardCard(card: Card);
+    + isClockwiseDirection(): bool
+    + setClockwiseDirection(inClockwiseDirection: bool): void
+    + getPlayerIndexOrder(): int
+    + setPlayerIndexOrder(inPlayerIndexOrder: int[]): void
+    + getPlayerCardCount(): map<int, int>
+    + setPlayerCardCount(inPlayerCardCount: map<int, int>): void
+    + getPlayersUnoStatus(): map<int, bool>
+    + setPlayersUnoStatus(inPlayersUnoStatus: map<int, bool>): void
+    + clear(): void
+}
+
+abstract class Player {
+    - name: string
+    - points: int
+
+    + addToHand(card: Card): void
+    + getHandSize(): int
+    + openHand(): Card[]
+    + clearHand(): void
+    + getName(): string
+    + getPoints(): int
+    + addPoints(amount: int): void
+    + {abstract} performAction(state: GameState): Card
+}
+
+Card  --  CardColor
+Card  --  CardValue
+Deck "1   " o-- "0..104  " Card
+Player <|--- HumanPlayer
+Player <|--- AIPlayer
+Player "1  " o-- "0..*      " Card
+Player -> GameState
+GameMatch "1" *-- "2..10  " Player
+GameMatch "1" *-- "1    " Deck
+GameMatch <-> GameState
+
+@enduml
