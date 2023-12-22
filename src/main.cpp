@@ -7,25 +7,32 @@
 #include "AIPlayer.h"
 #include "GameMatch.h"
 
+int playerCount = 5;
+
 int main() {
     srand(time(NULL));
 
     Deck deck;
     std::vector<std::unique_ptr<Player>> players;
 
-    HumanPlayer p1("You");
-    players.emplace_back(std::unique_ptr<Player>(new HumanPlayer(p1)));
+    if (playerCount < 2 || playerCount > 10) {
+        throw std::range_error("ERROR! Invalid player count.");
+    }
 
-    AIPlayer p2("CPU #1");
-    players.emplace_back(std::unique_ptr<Player>(new AIPlayer(p2)));
+    HumanPlayer player("You");
+    players.emplace_back(std::unique_ptr<Player>(new HumanPlayer(player)));
 
-    AIPlayer p3("CPU #2");
-    players.emplace_back(std::unique_ptr<Player>(new AIPlayer(p3)));
+    for (int i = 1; i < playerCount; i++) {
+        AIPlayer opponent(std::string("CPU #") + std::to_string(i));
+        players.emplace_back(std::unique_ptr<Player>(new AIPlayer(opponent)));
+    }
 
     GameMatch match = GameMatch(deck, std::move(players));
     int numberOfMatches = 0;
 
     do {
+        // TODO: Before each game, the players must be sorted randomly;
+
         std::cout << "Starting Match #" << numberOfMatches + 1 << std::endl;
         match.play();
 
