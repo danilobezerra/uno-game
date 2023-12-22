@@ -16,7 +16,7 @@ class Deck {
     static size_t randomIndex(size_t n);
 
 public:
-    Deck();
+    Deck(bool oldRules);
 
     void shuffle();
     Card draw();

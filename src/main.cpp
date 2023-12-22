@@ -10,7 +10,9 @@
 int main() {
     srand(time(NULL));
 
-    Deck deck;
+    bool newRules = false;
+    Deck deck { newRules };
+
     std::vector<std::unique_ptr<Player>> players;
 
     HumanPlayer p1("You");
