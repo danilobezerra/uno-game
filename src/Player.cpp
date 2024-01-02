@@ -28,7 +28,7 @@ void Player::printHand() const {
     std::cout << "Player [" << name << "] hand (" << hand.size() << "):\n";
 
     for (const auto& card : hand) {
-        std::cout << card.toString() << "\n";
+        std::cout << card << "\n";
     }
 }
 

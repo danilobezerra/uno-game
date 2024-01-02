@@ -7,6 +7,8 @@
 
 #include "Enums.h"
 
+#include <iostream>
+
 class Card {
     CardColor color;
     CardValue value;
@@ -17,6 +19,8 @@ public:
     CardColor getColor() const;
     CardValue getValue() const;
     std::string_view toString() const;
+
+    friend std::ostream& operator<<(std::ostream& stream, const Card& card);
 };
 
 

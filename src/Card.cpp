@@ -39,3 +39,8 @@ std::string_view Card::toString() const {
     stream << static_cast<int>(value);
     return std::string_view(stream.str());
 }
+
+std::ostream& operator<<(std::ostream& stream, const Card& card) {
+    stream << card.toString();
+    return stream;
+}
