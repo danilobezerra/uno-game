@@ -26,6 +26,7 @@ public:
     size_t getHandSize() const;
     std::vector<Card> openHand();
     void clearHand();
+    void printHand() const;
 
     std::string_view getName() const;
     int getPoints() const;

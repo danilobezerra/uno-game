@@ -4,8 +4,6 @@
 
 #include "GameMatch.h"
 
-#include <utility>
-
 GameMatch::GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), players(std::move(inPlayers)) {
 
 }
@@ -25,10 +23,14 @@ void GameMatch::setup() {
         }
     }
 
+    std::cout << "O jogador que estiver distribuindo as cartas embaralha e distribui 7 cartas para cada um." << std::endl;
+
     // As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras.
     while (deck.count() > 0) {
         drawPile.push_back(deck.draw());
     }
+
+    std::cout << "As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras." << std::endl;
 
     // A carta superior da pilha de Compras é virada para formar uma pilha de Descarte.
     discardPile.push_back(drawPile.back());
@@ -73,22 +75,23 @@ int GameMatch::countPoints() const {
 void GameMatch::play() {
     setup();
 
-    // TODO: setup game state
-    GameState state;
+    // O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário.
+    // TODO: Get random index
+
+    std::cout << "O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário." << std::endl;
 
     do {
-        for (auto &player : players) {
+        for (const auto &player : players) {
+            state.setTopDiscardCard(std::make_shared<Card>(drawPile.back()));
+            drawPile.pop_back();
+
             Card card = player->performAction(state);
 
-            // FIXME: Debug only, remember to check it correctly
-            if (card.getValue() == CardValue::REVERSE) {
-                std::reverse(players.begin(), players.end());
-                player->addPoints(20); // FIXME: Create a point table
-            }
+            std::cout << "Player [" << player->getName() << "] selected '" << card.toString() << "' card.\n";
 
-            if (player->getPoints() == 500) {
-                // TODO: This is the winner
-            }
+            discardPile.push_back(card);
+
+            // TODO: break loop if player has UNO true
         }
     } while (!isMatchOver());
 }

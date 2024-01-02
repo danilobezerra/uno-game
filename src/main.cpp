@@ -19,7 +19,7 @@ int main() {
         throw std::range_error("ERROR! Invalid player count.");
     }
 
-    HumanPlayer player("You");
+    HumanPlayer player("You", std::cin);
     players.emplace_back(std::unique_ptr<Player>(new HumanPlayer(player)));
 
     for (int i = 1; i < playerCount; i++) {

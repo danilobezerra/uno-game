@@ -9,9 +9,10 @@
 #include "Card.h"
 
 class HumanPlayer : public Player {
+    std::istream& input;
 
 public:
-    using Player::Player;
+    HumanPlayer(std::string inName, std::istream& inInput);
     Card performAction(const GameState &state) override;
 };
 
