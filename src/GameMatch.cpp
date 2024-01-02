@@ -79,20 +79,29 @@ void GameMatch::play() {
     // TODO: Get random index
 
     std::cout << "O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário." << std::endl;
+    int numberOfRounds = 0;
 
     do {
+        std::cout << "-----------------------------------------\n";
+        std::cout << "Round #" << numberOfRounds + 1 << ":\n";
+        std::cout << "-----------------------------------------\n";
+
         for (const auto &player : players) {
-            state.setTopDiscardCard(std::make_shared<Card>(drawPile.back()));
-            drawPile.pop_back();
+            Card topCard = discardPile.back();
+            std::cout << topCard << " is the card on top of the discard pile.\n\n";
+
+            state.setTopDiscardCard(std::make_shared<Card>(topCard));
 
             Card card = player->performAction(state);
 
-            std::cout << "Player [" << player->getName() << "] selected '" << card.toString() << "' card.\n";
+            std::cout << "\n" << player->getName() << " played '" << card.toString() << "' card.\n\n";
 
             discardPile.push_back(card);
 
             // TODO: break loop if player has UNO true
         }
+
+        numberOfRounds++;
     } while (!isMatchOver());
 }
 
