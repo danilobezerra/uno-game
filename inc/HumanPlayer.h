@@ -13,7 +13,7 @@ class HumanPlayer : public Player {
 
 public:
     HumanPlayer(std::string inName, std::istream& inInput);
-    Card performAction(const GameState &state) override;
+    std::unique_ptr<Card> performAction(const GameState &state) override;
 };
 
 #endif //UNO_GAME_HUMANPLAYER_H

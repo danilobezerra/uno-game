@@ -92,11 +92,22 @@ void GameMatch::play() {
 
             state.setTopDiscardCard(std::make_shared<Card>(topCard));
 
-            Card card = player->performAction(state);
+            std::unique_ptr<Card> cardPlayed = player->performAction(state);
+
+            if (cardPlayed) {
+                std::cout << "\n" << player->getName() << " played '" << *cardPlayed << "' card.\n\n";
 
             std::cout << "\n" << player->getName() << " played '" << card.toString() << "' card.\n\n";
 
-            discardPile.push_back(card);
+                discardPile.push_back(*cardPlayed);
+            } else {
+                std::cout << "\n" << player->getName() << " has no cards to play. Drawing a card...\n\n";
+
+                Card drawnPileCard = drawPile.back();
+                drawPile.pop_back();
+            }
+
+
 
             // TODO: break loop if player has UNO true
         }

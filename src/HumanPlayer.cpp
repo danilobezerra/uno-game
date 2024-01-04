@@ -8,7 +8,7 @@ HumanPlayer::HumanPlayer(std::string inName, std::istream &inInput) : Player(std
     std::cout << "Player [" << getName() << "] created.\n";
 }
 
-Card HumanPlayer::performAction(const GameState &state) {
+std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
     int index;
 
     while (true) {
@@ -22,7 +22,7 @@ Card HumanPlayer::performAction(const GameState &state) {
             Card playedCard = hand[index];
             hand.erase(hand.begin() + index);
 
-            return playedCard;
+            return std::make_unique<Card>(playedCard);
         }
 
         input.clear();

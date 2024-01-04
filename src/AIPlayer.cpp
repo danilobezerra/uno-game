@@ -4,7 +4,7 @@
 
 #include "AIPlayer.h"
 
-Card AIPlayer::performAction(const GameState &state) {
+std::unique_ptr<Card> AIPlayer::performAction(const GameState &state) {
     printHand();
 
     std::shared_ptr<Card> topCard = state.getTopDiscardCard();
@@ -14,9 +14,12 @@ Card AIPlayer::performAction(const GameState &state) {
             Card playedCard = hand[i];
             hand.erase(hand.begin() + i);
 
-            return playedCard;
+            return std::make_unique<Card>(playedCard);
         }
     }
+
+    return nullptr;
+}
 
     // FIXME: Get card from draw pile
     return hand[0];

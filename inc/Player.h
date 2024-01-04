@@ -32,7 +32,8 @@ public:
     int getPoints() const;
     void addPoints(int amount);
 
-    virtual Card performAction(const GameState &state) = 0;
+    virtual std::unique_ptr<Card> performAction(const GameState &state) = 0;
+
 };
 
 #endif //UNO_GAME_PLAYER_H

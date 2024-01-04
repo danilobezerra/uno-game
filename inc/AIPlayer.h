@@ -12,7 +12,7 @@ class AIPlayer : public Player {
 
 public:
     using Player::Player;
-    Card performAction(const GameState &state) override;
+    std::unique_ptr<Card> performAction(const GameState &state) override;
 };
 
 #endif //UNO_GAME_AIPLAYER_H
