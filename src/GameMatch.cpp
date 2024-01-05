@@ -92,7 +92,46 @@ void GameMatch::play() {
             if (cardPlayed) {
                 std::cout << "\n" << *player << " played '" << *cardPlayed << "' card.\n\n";
 
-            std::cout << "\n" << player->getName() << " played '" << card.toString() << "' card.\n\n";
+                switch (cardPlayed->getValue()) {
+                    case CardValue::PLUS_TWO:
+                        std::cout << "\n";
+                        /*
+                         * TODO: +2 cards
+                         * When used, it goes to the next player. If the next player has a +2 card, it can be used,
+                         * going to the next player. Otherwise, the player must buy the amount of cards grouped by the
+                         * number of used +2 cards (for example, if 2 +2 cards were used in a row, then the player must
+                         * buy 4 cards).
+                         */
+                        break;
+                    case CardValue::REVERSE:
+                        std::cout << "The flow of the game were switched!\n";
+                        /*
+                         * TODO: Reverse card
+                         * When used, it switches the flow of the game (going from clockwise to anti-clockwise and
+                         * vice versa, or from right to left and left to right). This means that the players that will
+                         * play each round goes in the opposite way.
+                         */
+                        break;
+                    case CardValue::JUMP:
+                        std::cout << "Next player round skipped!\n";
+                        /*
+                         * TODO: Jump card
+                         * When used, it skips the next player round.
+                         */
+                        break;
+                    /*
+                     * Extra feature
+                     */
+                    case CardValue::PLUS_TWO_DISCARD:
+                        /*
+                         * TODO: +2 discard card
+                         * When used, the next player must grab 2 cards randomly from the discard deck. If there are no
+                         * 2 cards available, the grab the required amount from the deck;
+                         */
+                        break;
+                    default:
+                        break;
+                }
 
                 discardPile.push_back(*cardPlayed);
             } else {
