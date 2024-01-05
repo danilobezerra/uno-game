@@ -23,14 +23,10 @@ void GameMatch::setup() {
         }
     }
 
-    std::cout << "O jogador que estiver distribuindo as cartas embaralha e distribui 7 cartas para cada um." << std::endl;
-
     // As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras.
     while (deck.count() > 0) {
         drawPile.push_back(deck.draw());
     }
-
-    std::cout << "As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras." << std::endl;
 
     // A carta superior da pilha de Compras é virada para formar uma pilha de Descarte.
     discardPile.push_back(drawPile.back());
@@ -78,7 +74,6 @@ void GameMatch::play() {
     // O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário.
     // TODO: Get random index
 
-    std::cout << "O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário." << std::endl;
     int numberOfRounds = 0;
 
     do {
@@ -95,15 +90,15 @@ void GameMatch::play() {
             std::unique_ptr<Card> cardPlayed = player->performAction(state);
 
             if (cardPlayed) {
-                std::cout << "\n" << player->getName() << " played '" << *cardPlayed << "' card.\n\n";
+                std::cout << "\n" << *player << " played '" << *cardPlayed << "' card.\n\n";
 
             std::cout << "\n" << player->getName() << " played '" << card.toString() << "' card.\n\n";
 
                 discardPile.push_back(*cardPlayed);
             } else {
-                std::cout << "\n" << player->getName() << " has no cards to play. Drawing a card...\n\n";
+                std::cout << "\n" << *player << " has no cards to play. Drawing a card...\n\n";
 
-                Card drawnPileCard = drawPile.back();
+                Card drawnCard = drawPile.back();
                 drawPile.pop_back();
             }
 

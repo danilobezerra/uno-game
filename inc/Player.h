@@ -34,6 +34,7 @@ public:
 
     virtual std::unique_ptr<Card> performAction(const GameState &state) = 0;
 
+    friend std::ostream& operator<<(std::ostream& stream, const Player& player);
 };
 
 #endif //UNO_GAME_PLAYER_H

@@ -25,8 +25,6 @@ void Player::clearHand() {
 }
 
 void Player::printHand() const {
-    std::cout << "Player [" << name << "] hand (" << hand.size() << "):\n";
-
     for (const auto& card : hand) {
         std::cout << card << "\n";
     }
@@ -46,4 +44,9 @@ int Player::getPoints() const {
 
 void Player::addPoints(int amount) {
     points += amount;
+}
+
+std::ostream& operator<<(std::ostream& stream, const Player& player) {
+    stream << "["<< player.name << "]";
+    return stream;
 }
