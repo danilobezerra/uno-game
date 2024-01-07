@@ -6,7 +6,7 @@
 
 #include <utility>
 
-Player::Player(std::string inName) : name(std::move(inName)), points(0) {
+Player::Player(std::string inName) : name(std::move(inName)), unoYell(false), points(0) {
     std::cout << "Player [" << name << "] created.\n";
 }
 

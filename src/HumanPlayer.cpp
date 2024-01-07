@@ -15,7 +15,8 @@ std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
     std::cout << "Player [" << name << "] hand (" << hand.size() << " cards):\n";
     printHand();
 
-    int index = prompt<int>("Input the index of the card you wish to play or -1 to draw a card:\n");
+    unoYell = false;
+    int index = prompt<int>("Input the index of the card you wish to play or -1 to draw a card: ");
 
     if (index >= 0 && index < hand.size()) {
         Card playedCard = hand[index];
@@ -24,12 +25,13 @@ std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
 
         hand.erase(hand.begin() + index);
 
-        if (hand.size() < 2) {
-            auto response = prompt<std::string>("There's only one card!!");
+        if (hand.size() == 1 && !unoYell) {
+            auto response = prompt<std::string>("There's only one card!! ");
             std::transform(response.begin(), response.end(), response.begin(), ::tolower);
 
             if (response == "uno") {
-                // TODO: Set unoYell true
+                std::cout << "The player [" << name << "] had yelled “UNO!”\n";
+                unoYell = true;
             }
         }
 

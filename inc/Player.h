@@ -16,6 +16,7 @@ class Player {
 protected:
     std::string name;
     std::vector<Card> hand;
+    bool unoYell;
     int points;
 
 public:
