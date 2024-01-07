@@ -4,29 +4,54 @@
 
 #include "HumanPlayer.h"
 
+#include <limits>
+#include <algorithm>
+
 HumanPlayer::HumanPlayer(std::string inName, std::istream &inInput) : Player(std::move(inName)), input(inInput) {
-    std::cout << "Player [" << inName << "] created.\n";
+
 }
 
 std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
-    int index;
+    std::cout << "Player [" << name << "] hand (" << hand.size() << " cards):\n";
+    printHand();
+
+    int index = prompt<int>("Input the index of the card you wish to play or -1 to draw a card:\n");
+
+    if (index >= 0 && index < hand.size()) {
+        Card playedCard = hand[index];
+
+        // TODO: Validate card
+
+        hand.erase(hand.begin() + index);
+
+        if (hand.size() < 2) {
+            auto response = prompt<std::string>("There's only one card!!");
+            std::transform(response.begin(), response.end(), response.begin(), ::tolower);
+
+            if (response == "uno") {
+                // TODO: Set unoYell true
+            }
+        }
+
+        return std::make_unique<Card>(playedCard);
+    }
+
+    return nullptr;
+}
+
+template<typename T> T HumanPlayer::prompt(const std::string& message) {
+    T response;
 
     while (true) {
-        std::cout << "Player [" << name << "] hand (" << hand.size() << " cards):\n";
-        printHand();
+        std::cout << message;
 
-        std::cout << "Input the index of the card you wish to play:\n";
-
-        if (input >> index && index >= 0 && index < hand.size()) {
-            std::cout << "\n";
-
-            Card playedCard = hand[index];
-            hand.erase(hand.begin() + index);
-
-            return std::make_unique<Card>(playedCard);
+        if (input >> response) {
+            return response;
         }
 
         input.clear();
-        std::cout << "Invalid input! Try again with a valid integer index.\n";
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Since this is the upper limit on the size of a stream, you are effectively telling cin that there is no limit to the number of characters to ignore.
+
+        std::cout << "Invalid input! Please try again.\n";
     }
 }
