@@ -12,7 +12,7 @@ HumanPlayer::HumanPlayer(std::string inName, std::istream &inInput) : Player(std
 }
 
 std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
-    std::cout << "Player [" << name << "] hand (" << hand.size() << " cards):\n";
+    std::cout << "Your current hand: ";
     printHand();
 
     unoYell = false;

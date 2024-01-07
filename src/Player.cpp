@@ -25,9 +25,15 @@ void Player::clearHand() {
 }
 
 void Player::printHand() const {
-    for (const auto& card : hand) {
-        std::cout << card << "\n";
+    for (int i = 0; i < hand.size(); i++) {
+        std::cout << "(" << i << ") " << hand[i];
+
+        if (i < hand.size() - 1) {
+            std::cout << ", ";
+        }
     }
+
+    std::cout << "\n";
 }
 
 size_t Player::getHandSize() const {
