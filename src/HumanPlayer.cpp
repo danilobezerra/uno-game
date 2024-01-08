@@ -12,35 +12,44 @@ HumanPlayer::HumanPlayer(std::string inName, std::istream &inInput) : Player(std
 }
 
 std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
-    std::cout << "Your current hand: ";
-    printHand();
+    while (true) {
+        std::cout << "Your current hand: ";
+        printHand();
 
-    unoYell = false;
-    int index = prompt<int>("Input the index of the card you wish to play or -1 to draw a card: ");
+        unoYell = false;
+        int index = prompt<int>("Input the index of the card you wish to play or -1 to draw a card: ");
 
-    std::cout << "\n";
+        std::cout << "\n";
 
-    if (index >= 0 && index < hand.size()) {
-        Card playedCard = hand[index];
-
-        // TODO: Validate card
-
-        hand.erase(hand.begin() + index);
-
-        if (hand.size() == 1 && !unoYell) {
-            auto response = prompt<std::string>("There's only one card!! ");
-            std::transform(response.begin(), response.end(), response.begin(), ::tolower);
-
-            if (response == "uno") {
-                std::cout << "\n[" << name << "] had yelled “UNO!”\n";
-                unoYell = true;
-            }
+        if (index == -1) {
+            return nullptr;
         }
 
-        return std::make_unique<Card>(playedCard);
-    }
+        if (index >= 0 && index < hand.size()) {
+            Card playedCard = hand[index];
 
-    return nullptr;
+            if (playedCard.getColor() == state.getTopDiscardCard()->getColor()
+                || playedCard.getValue() == state.getTopDiscardCard()->getValue()) {
+                hand.erase(hand.begin() + index);
+
+                if (hand.size() == 1 && !unoYell) {
+                    auto response = prompt<std::string>("There's only one card!! ");
+                    std::transform(response.begin(), response.end(), response.begin(), ::tolower);
+
+                    if (response == "uno") {
+                        std::cout << "\n[" << name << "] had yelled “UNO!”\n";
+                        unoYell = true;
+                    }
+                }
+
+                return std::make_unique<Card>(playedCard);
+            } else {
+                std::cout << "Invalid move! Card must match the color or value of the top card of the discard pile.\n";
+            }
+        } else {
+            std::cout << "Invalid option! Please try a valid option.\n";
+        }
+    }
 }
 
 template<typename T> T HumanPlayer::prompt(const std::string& message) {
