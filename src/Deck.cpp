@@ -4,17 +4,19 @@
 
 #include "Deck.h"
 
-Deck::Deck() {
+Deck::Deck(std::mt19937& rng, bool newRules) : generator(rng) {
 
     // TODO: create Deck only with 0-9
     for (int i = 0; i < static_cast<int>(CardColor::GREEN) + 1; i++) {
         cards.emplace_back(static_cast<CardColor>(i), CardValue::ZERO);
 
-        for (int j = 1; j < static_cast<int>(CardValue::NINE) + 1; j++) {
-            Card card = Card(static_cast<CardColor>(i), static_cast<CardValue>(j));
+        if (!newRules) {
+            cards.emplace_back(static_cast<CardColor>(i), CardValue::ZERO);
+        }
 
-            cards.push_back(card);
-            cards.push_back(card);
+        for (int j = 1; j < static_cast<int>(CardValue::NINE) + 1; j++) {
+            cards.push_back(cards.emplace_back(static_cast<CardColor>(i), static_cast<CardValue>(j)));
+            cards.push_back(cards.emplace_back(static_cast<CardColor>(i), static_cast<CardValue>(j)));
         }
 
         //cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
@@ -27,22 +29,15 @@ Deck::Deck() {
 
         //cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
     }
-
 }
 
 /*
- * Is this C implementation of Fisher-Yates shuffle correct?
- * https://stackoverflow.com/a/3348142ccc
+ * Mersenne Twister PRNG
+ * https://en.wikipedia.org/wiki/Mersenne_Twister
  */
-size_t Deck::randomIndex(size_t n) {
-    int limit = RAND_MAX - RAND_MAX % n;
-    int random;
-
-    do {
-        random = rand();
-    } while (random >= limit);
-
-    return random % n;
+size_t Deck::randomIndex(size_t max) {
+    std::uniform_int_distribution<size_t> distribution(0, max);
+    return distribution(generator);
 }
 
 /*
@@ -51,7 +46,8 @@ size_t Deck::randomIndex(size_t n) {
  */
 void Deck::shuffle() {
     for (size_t i = cards.size() - 1; i > 0; i--) {
-        size_t j = randomIndex(i + 1);
+        size_t j = randomIndex(i);
+
         std::swap(cards[i], cards[j]);
     }
 }

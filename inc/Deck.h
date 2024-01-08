@@ -7,16 +7,18 @@
 
 #include <algorithm>
 #include <vector>
+#include <random>
 #include "Card.h"
 #include "Enums.h"
 
 class Deck {
     std::vector<Card> cards;
+    std::mt19937& generator;
 
-    static size_t randomIndex(size_t n);
+    size_t randomIndex(size_t n);
 
 public:
-    Deck();
+    Deck(std::mt19937& rng, bool newRules);
 
     void shuffle();
     Card draw();

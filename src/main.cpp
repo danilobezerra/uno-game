@@ -2,7 +2,6 @@
 #include <vector>
 #include <memory>
 #include <random>
-#include <chrono>
 
 #include "Player.h"
 #include "HumanPlayer.h"
@@ -12,12 +11,11 @@
 int playerCount = 5;
 
 int main() {
-    srand(time(NULL));
+    std::random_device seed;
+    std::mt19937 rng(seed());
 
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 rng(static_cast<unsigned>(seed));
-
-    Deck deck;
+    bool newRules = false;
+    Deck deck(rng, newRules);
     std::vector<std::unique_ptr<Player>> players;
 
     if (playerCount < 2 || playerCount > 10) {

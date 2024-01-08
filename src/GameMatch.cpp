@@ -4,7 +4,7 @@
 
 #include "GameMatch.h"
 
-GameMatch::GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), currentMatch(0), players(std::move(inPlayers)) {
+GameMatch::GameMatch(Deck& inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), currentMatch(0), players(std::move(inPlayers)) {
 
 }
 
