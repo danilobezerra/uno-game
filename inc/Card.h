@@ -7,13 +7,14 @@
 
 #include "Enums.h"
 
-#include <iostream>
-
 class GameState;
 
 class Card {
     CardColor color;
     CardValue value;
+
+    void setColorToStream(std::ostream& stream) const;
+    void setValueToStream(std::ostream& stream) const;
 
 public:
     Card(CardColor inColor, CardValue inValue);
@@ -21,7 +22,6 @@ public:
     CardColor getColor() const;
     CardValue getValue() const;
     bool isValid(const GameState& state) const;
-    std::string_view toString() const;
 
     friend std::ostream& operator<<(std::ostream& stream, const Card& card);
 
