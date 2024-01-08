@@ -14,25 +14,21 @@ void GameMatch::setup() {
         players[i]->clearHand();
     }
 
-    // O jogador que estiver distribuindo as cartas embaralha...
     deck.shuffle();
 
     clockwiseDirection = true;
     currentPlayerIndex = 0;
 
-    // e distribui 7 cartas para cada um.
     for (auto &player : players) {
         for (int i = 0; i < 7; i++) {
             player->addToHand(deck.draw());
         }
     }
 
-    // As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras.
     while (deck.count() > 0) {
         drawPile.push_back(deck.draw());
     }
 
-    // A carta superior da pilha de Compras é virada para formar uma pilha de Descarte.
     discardPile.push_back(drawPile.back());
     drawPile.pop_back();
 }
@@ -53,7 +49,7 @@ int GameMatch::countPoints() const {
                 case CardValue::SEVEN:
                 case CardValue::EIGHT:
                 case CardValue::NINE:
-                    totalPoints += static_cast<int>(card.getValue()); // Valor Nominal
+                    totalPoints += static_cast<int>(card.getValue());
                     break;
                 case CardValue::PLUS_TWO:
                 case CardValue::REVERSE:
@@ -101,10 +97,7 @@ void GameMatch::play() {
                 std::cout << *player << " played the " << *cardPlayed << " card. " << player->getHandSize() << " cards remaining.\n";
                 discardPile.push_back(*cardPlayed);
 
-                // TODO: check if player has empty hand, the round winner!
                 if (player->getHandSize() == 0) {
-                    //discardPile.push_back(*cardPlayed);
-
                     std::cout << "\n=========================================\n";
                     std::cout << *player << " are the winner of the Match #" << currentMatch + 1 << "!!\n";
                     std::cout << "This match lasted for " << numberOfRounds << " rounds.\n";
@@ -115,15 +108,6 @@ void GameMatch::play() {
 
                 switch (cardPlayed->getValue()) {
                     case CardValue::PLUS_TWO:
-                        std::cout << "\n";
-                        /*
-                         * TODO: +2 cards
-                         * When used, it goes to the next player. If the next player has a +2 card, it can be used,
-                         * going to the next player. Otherwise, the player must buy the amount of cards grouped by the
-                         * number of used +2 cards (for example, if 2 +2 cards were used in a row, then the player must
-                         * buy 4 cards).
-                         */
-
                         nextPlayer();
 
                         players[currentPlayerIndex]->addToHand(drawPile.back());
@@ -132,29 +116,17 @@ void GameMatch::play() {
                         players[currentPlayerIndex]->addToHand(drawPile.back());
                         drawPile.pop_back();
 
-                        std::cout << *player << " has used a +2 card. " << *players[currentPlayerIndex] << "'s round skipped and must buy 2 cards!\n";
+                        std::cout << *players[currentPlayerIndex] << "'s round skipped and must buy 2 cards!\n";
 
                         break;
                     case CardValue::REVERSE:
-                        /*
-                         * TODO: Reverse card
-                         * When used, it switches the flow of the game (going from clockwise to anti-clockwise and
-                         * vice versa, or from right to left and left to right). This means that the players that will
-                         * play each round goes in the opposite way.
-                         */
-
                         clockwiseDirection ^= true;
-                        std::cout << *player << " has used a Reverse card. The flow of the game were switched!\n";
+                        std::cout << "The flow of the game were switched!\n";
 
                         break;
                     case CardValue::JUMP:
-                        /*
-                         * TODO: Jump card
-                         * When used, it skips the next player round.
-                         */
-
                         nextPlayer();
-                        std::cout << *player << " has used a Jump card. " << *players[currentPlayerIndex] << "'s round skipped!\n";
+                        std::cout << *players[currentPlayerIndex] << "'s round skipped!\n";
 
                         break;
                     /*
@@ -170,11 +142,7 @@ void GameMatch::play() {
                     default:
                         break;
                 }
-
-                //discardPile.push_back(*cardPlayed);
             } else {
-                std::cout << *player << " has no cards to play. Drawing a card...\n";
-
                 Card& drawnCard = drawPile.back();
                 drawPile.pop_back();
 
@@ -184,7 +152,9 @@ void GameMatch::play() {
                  * servir, ele pode jogá-la na mesma rodada. Caso contrário, passará a vez para o próximo jogador.
                  * O jogador não pode jogar uma carta que já estava na sua mão antes de fazer a compra.
                  */
+
                 player->addToHand(drawnCard);
+                std::cout << *player << " has no cards to play. Drawing a card... " << player->getHandSize() << " cards remaining.\n";
             }
 
             // TODO: Check UNO yell and punish if false
@@ -215,8 +185,6 @@ bool GameMatch::isMatchOver() const {
     bool matchOver = false;
 
     for (auto &player : players) {
-        //std::cout << *player << ": " << player->getHandSize() << "\n";
-
         if (player->getHandSize() == 0) {
             matchOver = true;
 
