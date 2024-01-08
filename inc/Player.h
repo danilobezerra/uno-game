@@ -30,6 +30,7 @@ public:
     void printHand() const;
 
     std::string_view getName() const;
+    bool areUnoYelled() const;
     int getPoints() const;
     void addPoints(int amount);
 

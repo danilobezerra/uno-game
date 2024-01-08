@@ -153,7 +153,15 @@ void GameMatch::play() {
                 std::cout << *player << " has no cards to play. Drawing a card... " << player->getHandSize() << " cards remaining.\n";
             }
 
-            // TODO: Check UNO yell and punish if false
+            if (player->getHandSize() == 1 && !player->areUnoYelled()) {
+                player->addToHand(drawPile.back());
+                drawPile.pop_back();
+
+                player->addToHand(drawPile.back());
+                drawPile.pop_back();
+
+                std::cout << "Uh-oh! " << *player << " forgot to yell “UNO!”... Punished! " << player->getHandSize() << " cards remaining.\n";
+            }
 
             nextPlayer();
         }

@@ -12,6 +12,10 @@ Player::Player(std::string inName) : name(std::move(inName)), unoYell(false), po
 
 Player::~Player() = default;
 
+bool Player::areUnoYelled() const {
+    return unoYell;
+}
+
 void Player::addToHand(const Card &card) {
     hand.push_back(card);
 }
