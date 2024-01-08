@@ -14,7 +14,7 @@ std::unique_ptr<Card> AIPlayer::performAction(const GameState &state) {
             hand.erase(hand.begin() + i);
 
             if (hand.size() == 1) {
-                std::cout << "The player [" << name << "] had yelled “UNO!”\n";
+                std::cout << "[" << name << "] had yelled “UNO!”\n";
                 unoYell = true;
             }
 
