@@ -16,6 +16,16 @@ Deck::Deck() {
             cards.push_back(card);
             cards.push_back(card);
         }
+
+        //cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::JUMP);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::JUMP);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
+        cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
+
+        //cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
     }
 
 }
