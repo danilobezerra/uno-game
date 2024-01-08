@@ -5,8 +5,6 @@
 #include "Deck.h"
 
 Deck::Deck(std::mt19937& rng, bool newRules) : generator(rng) {
-
-    // TODO: create Deck only with 0-9
     for (int i = 0; i < static_cast<int>(CardColor::GREEN) + 1; i++) {
         cards.emplace_back(static_cast<CardColor>(i), CardValue::ZERO);
 
@@ -19,15 +17,12 @@ Deck::Deck(std::mt19937& rng, bool newRules) : generator(rng) {
             cards.push_back(cards.emplace_back(static_cast<CardColor>(i), static_cast<CardValue>(j)));
         }
 
-        //cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::PLUS_TWO);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::JUMP);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::JUMP);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
         cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
-
-        //cards.emplace_back(static_cast<CardColor>(i), CardValue::REVERSE);
     }
 }
 
