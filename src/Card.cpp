@@ -5,6 +5,7 @@
 #include "Card.h"
 
 #include <sstream>
+#include "GameState.h"
 
 Card::Card(CardColor inColor, CardValue inValue) : color(inColor), value(inValue) {
 
@@ -16,6 +17,10 @@ CardColor Card::getColor() const {
 
 CardValue Card::getValue() const {
     return value;
+}
+
+bool Card::isValid(const GameState& state) const {
+    return color == state.getTopDiscardCard()->getColor() || value == state.getTopDiscardCard()->getValue();
 }
 
 std::string_view Card::toString() const {

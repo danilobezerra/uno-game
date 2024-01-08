@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+class GameState;
+
 class Card {
     CardColor color;
     CardValue value;
@@ -18,9 +20,11 @@ public:
 
     CardColor getColor() const;
     CardValue getValue() const;
+    bool isValid(const GameState& state) const;
     std::string_view toString() const;
 
     friend std::ostream& operator<<(std::ostream& stream, const Card& card);
+
 };
 
 

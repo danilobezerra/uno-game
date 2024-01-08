@@ -25,26 +25,19 @@ std::unique_ptr<Card> HumanPlayer::performAction(const GameState &state) {
             return nullptr;
         }
 
-        if (index >= 0 && index < hand.size()) {
+        if (isOptionValid(index)) {
             Card playedCard = hand[index];
 
-            if (playedCard.getColor() == state.getTopDiscardCard()->getColor()
-                || playedCard.getValue() == state.getTopDiscardCard()->getValue()) {
+            if (playedCard.isValid(state)) {
                 hand.erase(hand.begin() + index);
 
                 if (hand.size() == 1 && !unoYell) {
-                    auto response = prompt<std::string>("There's only one card!! ");
-                    std::transform(response.begin(), response.end(), response.begin(), ::tolower);
-
-                    if (response == "uno") {
-                        std::cout << "\n[" << name << "] had yelled “UNO!”\n";
-                        unoYell = true;
-                    }
+                    handleUnoYell();
                 }
 
                 return std::make_unique<Card>(playedCard);
             } else {
-                std::cout << "Invalid move! Card must match the color or value of the top card of the discard pile.\n";
+                std::cout << "Invalid card! Must match the color or value of the top card of the discard pile.\n";
             }
         } else {
             std::cout << "Invalid option! Please try a valid option.\n";
@@ -66,5 +59,19 @@ template<typename T> T HumanPlayer::prompt(const std::string& message) {
         input.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Since this is the upper limit on the size of a stream, you are effectively telling cin that there is no limit to the number of characters to ignore.
 
         std::cout << "Invalid input! Please try again.\n";
+    }
+}
+
+bool HumanPlayer::isOptionValid(int index) const {
+    return index >= 0 && index < hand.size();
+}
+
+void HumanPlayer::handleUnoYell() {
+    auto response = prompt<std::string>("There's only one card!! ");
+    std::transform(response.begin(), response.end(), response.begin(), tolower);
+
+    if (response == "uno") {
+        std::cout << "\n[" << name << "] had yelled “UNO!”\n";
+        unoYell = true;
     }
 }
