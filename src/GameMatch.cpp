@@ -70,10 +70,6 @@ int GameMatch::countPoints() const {
 
 void GameMatch::play() {
     setup();
-
-    // O jogador à esquerda de quem estiver distribuindo as cartas começa o jogo, e o jogo deverá seguir em sentido horário.
-    // TODO: Get random index
-
     int numberOfRounds = 0;
 
     while (!isMatchOver()) {
