@@ -4,7 +4,7 @@
 
 #include "GameMatch.h"
 
-GameMatch::GameMatch(Deck& inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), currentMatch(0), players(std::move(inPlayers)) {
+GameMatch::GameMatch(Deck& inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), players(std::move(inPlayers)) {
 
 }
 
@@ -68,7 +68,7 @@ int GameMatch::countPoints() const {
     return totalPoints;
 }
 
-void GameMatch::play() {
+void GameMatch::play(std::mt19937& rng, int currentMatch = 0) {
     setup();
     int numberOfRounds = 0;
 

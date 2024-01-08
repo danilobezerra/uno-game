@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
     do {
         std::cout << "Starting Match #" << numberOfMatches + 1 << std::endl;
-        match.play();
+        match.play(rng, numberOfMatches);
 
         numberOfMatches++;
     } while (scoreCard && !match.isGameOver());

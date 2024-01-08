@@ -12,7 +12,6 @@
 
 class GameMatch {
     Deck deck;
-    size_t currentMatch;
 
     std::vector<std::unique_ptr<Player>> players;
     std::vector<Card> drawPile;
@@ -40,7 +39,7 @@ class GameMatch {
 public:
     GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers);
 
-    void play();
+    void play(std::mt19937& rng, int currentMatch);
     bool isMatchOver() const;
     bool isGameOver() const;
 };
