@@ -17,16 +17,29 @@ class GameMatch {
     std::vector<Card> drawPile;
     std::vector<Card> discardPile;
 
-
-    // TODO: setup game state
+    /*
+     * TODO: setup game state
+     */
     GameState state;
+
+    bool clockwiseDirection;
+    std::vector<int> playerIndexes;
+    int currentPlayerIndex;
+    CardColor currentColor;
+    CardValue currentValue;
+
+    /*
+     * end game state
+     */
 
     void setup();
     int countPoints() const;
+    void nextPlayer();
+
 public:
     GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers);
 
-    void play();
+    void play(std::mt19937& rng, int currentMatch);
     bool isMatchOver() const;
     bool isGameOver() const;
 };

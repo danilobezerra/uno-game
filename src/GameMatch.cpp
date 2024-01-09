@@ -4,33 +4,31 @@
 
 #include "GameMatch.h"
 
-#include <utility>
-
-GameMatch::GameMatch(Deck &inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), players(std::move(inPlayers)) {
+GameMatch::GameMatch(Deck& inDeck, std::vector<std::unique_ptr<Player>> inPlayers) : deck(inDeck), players(std::move(inPlayers)) {
 
 }
 
 void GameMatch::setup() {
-    for (auto &player : players) {
-        player->clearHand();
+    for (int i = 0; i < players.size(); i++) {
+        playerIndexes.emplace_back(i);
+        players[i]->clearHand();
     }
 
-    // O jogador que estiver distribuindo as cartas embaralha...
     deck.shuffle();
 
-    // e distribui 7 cartas para cada um.
+    clockwiseDirection = true;
+    currentPlayerIndex = 0;
+
     for (auto &player : players) {
         for (int i = 0; i < 7; i++) {
             player->addToHand(deck.draw());
         }
     }
 
-    // As cartas restantes devem ser colocadas viradas para baixo, formando a pilha de Compras.
     while (deck.count() > 0) {
         drawPile.push_back(deck.draw());
     }
 
-    // A carta superior da pilha de Compras é virada para formar uma pilha de Descarte.
     discardPile.push_back(drawPile.back());
     drawPile.pop_back();
 }
@@ -51,7 +49,7 @@ int GameMatch::countPoints() const {
                 case CardValue::SEVEN:
                 case CardValue::EIGHT:
                 case CardValue::NINE:
-                    totalPoints += static_cast<int>(card.getValue()); // Valor Nominal
+                    totalPoints += static_cast<int>(card.getValue());
                     break;
                 case CardValue::PLUS_TWO:
                 case CardValue::REVERSE:
@@ -70,27 +68,120 @@ int GameMatch::countPoints() const {
     return totalPoints;
 }
 
-void GameMatch::play() {
+void GameMatch::play(std::mt19937& rng, int currentMatch = 0) {
     setup();
+    int numberOfRounds = 0;
 
-    // TODO: setup game state
-    GameState state;
+    while (!isMatchOver()) {
+        std::cout << "\n-----------------------------------------\n";
+        std::cout << "Round #" << numberOfRounds + 1 << ":\n";
+        std::cout << "-----------------------------------------\n";
 
-    do {
-        for (auto &player : players) {
-            Card card = player->performAction(state);
+        for (size_t i = 0; i < players.size(); i++) {
+            const auto& player = players[currentPlayerIndex];
+            Card discardPileTop = discardPile.back();
 
-            // FIXME: Debug only, remember to check it correctly
-            if (card.getValue() == CardValue::REVERSE) {
-                std::reverse(players.begin(), players.end());
-                player->addPoints(20); // FIXME: Create a point table
+            std::cout << discardPileTop << " is the card on top of the discard pile.\n\n";
+
+            state.setTopDiscardCard(std::make_shared<Card>(discardPileTop));
+            currentColor = discardPileTop.getColor();
+            currentValue = discardPileTop.getValue();
+
+            std::unique_ptr<Card> cardPlayed = player->performAction(state);
+
+            if (cardPlayed) {
+                std::cout << *player << " played the " << *cardPlayed << " card. " << player->getHandSize() << " cards remaining.\n";
+                discardPile.push_back(*cardPlayed);
+
+                if (player->getHandSize() == 0) {
+                    std::cout << "\n=========================================\n";
+                    std::cout << *player << " are the winner of the Match #" << currentMatch + 1 << "!!\n";
+                    std::cout << "This match lasted for " << numberOfRounds << " rounds.\n";
+                    std::cout << "=========================================\n";
+
+                    break;
+                }
+
+                switch (cardPlayed->getValue()) {
+                    case CardValue::PLUS_TWO:
+                        nextPlayer();
+
+                        players[currentPlayerIndex]->addToHand(drawPile.back());
+                        drawPile.pop_back();
+
+                        players[currentPlayerIndex]->addToHand(drawPile.back());
+                        drawPile.pop_back();
+
+                        std::cout << *players[currentPlayerIndex] << "'s round skipped and must buy 2 cards!\n";
+
+                        break;
+                    case CardValue::REVERSE:
+                        clockwiseDirection ^= true;
+                        std::cout << "The flow of the game were switched!\n";
+
+                        break;
+                    case CardValue::JUMP:
+                        nextPlayer();
+                        std::cout << *players[currentPlayerIndex] << "'s round skipped!\n";
+
+                        break;
+                    /*
+                     * Extra feature
+                     */
+                    case CardValue::PLUS_TWO_DISCARD:
+                        /*
+                         * TODO: +2 discard card
+                         * When used, the next player must grab 2 cards randomly from the discard deck. If there are no
+                         * 2 cards available, the grab the required amount from the deck;
+                         */
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                Card& drawnCard = drawPile.back();
+                drawPile.pop_back();
+
+                /*
+                 * FIXME: Check drawn card
+                 * Se o jogador não tiver uma carta que combine, deve comprar uma na pilha de Compras. Se a nova carta
+                 * servir, ele pode jogá-la na mesma rodada. Caso contrário, passará a vez para o próximo jogador.
+                 * O jogador não pode jogar uma carta que já estava na sua mão antes de fazer a compra.
+                 */
+
+                player->addToHand(drawnCard);
+                std::cout << *player << " has no cards to play. Drawing a card... " << player->getHandSize() << " cards remaining.\n";
             }
 
-            if (player->getPoints() == 500) {
-                // TODO: This is the winner
+            if (player->getHandSize() == 1 && !player->areUnoYelled()) {
+                player->addToHand(drawPile.back());
+                drawPile.pop_back();
+
+                player->addToHand(drawPile.back());
+                drawPile.pop_back();
+
+                std::cout << "Uh-oh! " << *player << " forgot to yell “UNO!”... Punished! " << player->getHandSize() << " cards remaining.\n";
             }
+
+            nextPlayer();
         }
-    } while (!isMatchOver());
+
+        numberOfRounds++;
+    }
+}
+
+void GameMatch::nextPlayer() {
+    int size = static_cast<int>(playerIndexes.size());
+
+    if (clockwiseDirection) {
+        currentPlayerIndex = (currentPlayerIndex + 1) % size;
+    } else {
+        currentPlayerIndex = (currentPlayerIndex - 1) % size;
+
+        if (currentPlayerIndex < 0) {
+            currentPlayerIndex = size - 1;
+        }
+    }
 }
 
 bool GameMatch::isMatchOver() const {

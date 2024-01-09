@@ -16,6 +16,7 @@ class Player {
 protected:
     std::string name;
     std::vector<Card> hand;
+    bool unoYell;
     int points;
 
 public:
@@ -26,12 +27,16 @@ public:
     size_t getHandSize() const;
     std::vector<Card> openHand();
     void clearHand();
+    void printHand() const;
 
     std::string_view getName() const;
+    bool areUnoYelled() const;
     int getPoints() const;
     void addPoints(int amount);
 
-    virtual Card performAction(const GameState &state) = 0;
+    virtual std::unique_ptr<Card> performAction(const GameState &state) = 0;
+
+    friend std::ostream& operator<<(std::ostream& stream, const Player& player);
 };
 
 #endif //UNO_GAME_PLAYER_H
